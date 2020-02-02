@@ -1,0 +1,17 @@
+<h1>Displaying all threads associaed with forum <%=forum.Forum_name%></h1>
+<h2>Form Description</h2>
+<p><%=forum.Forum_description%></p>
+<h2>List Of all Threads of the forum</h2>
+<% forum.thread.forEach(function(Thd){ %>
+    <%console.log(Thd._id)%>
+    <%console.log(Thd.Thread_name)%>
+    <div>
+        <!--Here to display box of theads-->
+        <div>
+            <!--Here to display Threads-->
+            <p>
+                <a href=""><%=Thd.Thread_name%></a>
+            </p>
+        </div>
+    </div>
+<%})%>

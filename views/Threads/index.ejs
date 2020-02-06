@@ -1,21 +1,40 @@
 <%- include("../partials/header")%>
-<h1>Displaying all threads associaed with forum <%=forum.Forum_name%></h1>
-<h2>Form Description</h2>
-<p><%=forum.Forum_description%></p>
-<h2>List Of all Threads of the forum</h2>
-<% forum.thread.forEach(function(Thd){ %>
-    <%console.log(Thd._id)%>
-    <%console.log(Thd.Thread_name)%>
-    <div>
-        <!--Here to display box of theads-->
-        <div>
-            <!--Here to display Threads-->
-            <p>
+<div class="container">
+    <h1><%=forum.Forum_name%></h1>
+    <p><%=forum.Forum_description%></p>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+              <th scope="col">Thread</th>
+              <th scope="col"># of Posts</th>
+              <th scope="col">Created By</th>
+              <th scope="col">Statistics</th>
+              <th scope="col">Last Post</th>
+            </tr>
+          </thead>
+        <tbody>
+    <%forum.thread.forEach(function(Thd){%>
+        <tr>
+            <th scope="row">
                 <a href=""><%=Thd.Thread_name%></a>
-            </p>
-        </div>
-    </div>
-<%})%>
+            </th>
+            <th scope="row">
+                <%=Thd.comments.length%>
+            </th>
+            <th scope="row">
+                <a href="">i_rebel_aj</a>
+            </th>
+            <th scope="row">
+                0 views 0 responses
+            </th>
+            <th scope="row">
+                12:00 am <a href="">i_rebel_aj</a>
+            </th>
+        </tr>
+    <%})%>
+        </tbody>
+    </table>
+</div>
 <a href="/forum/<%=forum._id%>/thread/new" class="btn btn-outline-primary">Create new thread</a>
 <a href="" class="btn btn-outline-danger">Delete a Thread</a>
 <%-include("../partials/footer")%>

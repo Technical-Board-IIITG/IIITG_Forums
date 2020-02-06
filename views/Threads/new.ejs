@@ -1,0 +1,17 @@
+<%-include("../partials/header")%>
+<h1>New Thread will be created here</h1>
+<div class="container">
+    <form action="/forum/<%=forum_id%>/thread" method="POST">
+        <div class="form-group">
+            <input class="form-control" type="text" name="Thread_name" placeholder="Thread Name">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="text" name="Thread_description" placeholder="Thread Description">
+        </div>
+        <div class="form-group">
+            <button class="btn btn-lg btn-primary btn-block">Submit!</button>
+        </div>
+    </form>
+    <a href="/" class="btn btn-outline-info">Go Back</a>
+</div>
+<%-include("../partials/footer")%>

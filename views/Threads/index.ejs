@@ -16,7 +16,7 @@
     <%forum.thread.forEach(function(Thd){%>
         <tr>
             <th scope="row">
-                <a href=""><%=Thd.Thread_name%></a>
+                <a href="/forum/<%=forum._id%>/thread/<%=Thd._id%>/show"><%=Thd.Thread_name%></a>
             </th>
             <th scope="row">
                 <%=Thd.comments.length%>

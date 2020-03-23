@@ -13,7 +13,6 @@ router.get("/", function(req,res){
 });
 //Create- Add new campgroud to the database
 router.post("/", function(req,res){
-    console.log(req.body);
     var Forum_name=req.body.Forum_name;
     var Forum_description=req.body.Forum_description;
     var newForum={Forum_name: Forum_name, Forum_description:Forum_description};
@@ -22,7 +21,6 @@ router.post("/", function(req,res){
         if(err){
             console.log(err);
         }else{
-            console.log(newlyCreated);
             res.redirect("/forum");
         }
     });

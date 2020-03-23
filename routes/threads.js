@@ -26,9 +26,9 @@ router.get("/new", function(req,res){
 
 });
 
-/*=====================================
+/*========================================
     Adding new thread to the forum
-=======================================*/
+==========================================*/
 router.post("/", function(req,res){
     console.log(req.body);
     var Thread_name=req.body.Thread_name;
@@ -48,7 +48,7 @@ router.post("/", function(req,res){
                 if(err){
                     console.log(err);
                 }else{
-                    console.log(newlyCreated);
+                    //console.log(newlyCreated);
                     //var merged={...newlyCreated, ...newThread};
                     //console.log(merged);
                     foundforum.thread.push(newlyCreated);
@@ -59,19 +59,21 @@ router.post("/", function(req,res){
         }
     });
 });
-/*==============================
-        Show new thread
-================================*/
+/*=====================================
+        Show a particular thread
+=======================================*/
 router.get("/:id/show", function(req,res){
     //res.send("Thread Deatils will be shown here");
     //console.log(req.params);
+    //console.log(req.baseUrl);
+    var baseUrl=req.baseUrl;
     threads.findById(req.params.id).populate("comments").exec(function(err, foundthread){
         if(err){
             console.log(err);
         }
         else{
             console.log(foundthread);
-            res.render("Threads/show",{thread:foundthread});
+            res.render("Threads/show",{thread:foundthread, baseURL:baseUrl});
         }
     });
 });

@@ -9,6 +9,7 @@ var seedDB = require("./seeds");
 var forumRoutes = require("./routes/forums");
 var threadRoutes = require("./routes/threads");
 var indexRoutes = require("./routes/index");
+var commentRoutes= require("./routes/comments");
 
 mongoose.connect("mongodb://localhost/Project_forum");
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -21,6 +22,7 @@ app.use(methodOverride("_method"));
 app.use("/", indexRoutes);
 app.use("/forum", forumRoutes);
 app.use("/forum/:id/thread", threadRoutes);
+app.use("/forum/:id/thread/:id/comments", commentRoutes);
 
 
 app.listen(3000, function () {

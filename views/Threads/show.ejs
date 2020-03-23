@@ -1,0 +1,66 @@
+<%- include("../partials/header")%>
+<!--====================================================-->
+<!--For The Time Being add all style here only-->
+<!--====================================================-->
+<style>
+
+</style>
+
+<!--==================================================
+    Place For Actual HTML Code
+======================================================-->
+<h1>Thread: <%=thread.Thread_name%></h1>
+<hr>
+<div>
+    <%=thread.Thread_Description%>
+</div>
+<hr>
+<!--View all comments-->
+<div class="comments">
+    <h3>Comments</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+              <th scope="col">Comment</th>
+              <th scope="col">Author</th>
+            </tr>
+          </thead>
+        <tbody>
+    <%thread.comments.forEach(function(cmt){%>
+        <tr>
+            <th scope="row">
+                <%=cmt.text%>
+            </th>
+            <th scope="row">
+                <%=cmt.author%>
+            </th>
+        </tr>
+    <%})%>
+        </tbody>
+    </table>
+</div>
+
+<!--Comment Addition Form-->
+<button onclick="toggleCommentBox()" class="btn btn-primary">Add Comment</button>
+<div id="commentBox"style="display: none;">
+    <form action="<%=baseURL%>/<%=thread._id%>/comments" method="POST">
+        <input type="text" placeholder="author" name="author"><br>
+        <input type="text" placeholder="text" name="text"><br>
+        <button class="btn btn-primary">Post Comment!</button>
+    </form>
+</div>
+
+<!--====================================================-->
+<!--For the time being add all scripts here only-->
+<!--====================================================-->
+<script>
+    function toggleCommentBox(){
+        var x=document.getElementById("commentBox");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+</script>
+<%-include("../partials/footer")%>

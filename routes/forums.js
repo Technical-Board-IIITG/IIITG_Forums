@@ -1,6 +1,7 @@
 var express=require("express");
 var router=express.Router();
 var Forums=require("../models/forum");
+
 //Index Show all forums 
 router.get("/", function(req,res){
     Forums.find({}, function(err, allForums){
@@ -31,5 +32,37 @@ router.post("/", function(req,res){
 //New- Show form to create new forum
 router.get("/new", function(req,res){
     res.render("Forums/new");
+});
+/*=================================
+    Showing a edit forum route
+===================================*/
+router.get("/:id/edit", function(req,res){
+    //console.log(req.params.id);
+    Forums.findById(req.params.id, function(err, foundforum){
+        if(err){
+            console.log("Forum not found");
+            console.log(err);
+        }
+        else{
+            res.render("Forums/edit", {forum: foundforum});
+            //res.send("Edit Route for the forum will Go here");
+        }
+    })
+    
+});
+/*=============================
+    PUT Request to edit forum
+===============================*/
+router.put("/:id",function(req,res){
+    //console.log(req.body);
+    //res.send("Update Route");
+    Forums.findByIdAndUpdate(req.params.id,req.body,function(err, updatedBlog){
+        if(err){
+            console.log(err);
+            res.redirect("/forums");
+        }else{
+            res.redirect("/forum/"+req.params.id+"/thread");
+        }
+    });
 });
 module.exports=router;

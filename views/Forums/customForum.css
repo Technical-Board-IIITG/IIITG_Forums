@@ -1,5 +1,0 @@
-/*Issue Frontend- change color of every odd element i table to skyblue*/
-/* And every even element of Dark blue*/
-.table-striped>tbody>tr:nth-child(odd)>th {
-    background-color: skyblue; 
-  }

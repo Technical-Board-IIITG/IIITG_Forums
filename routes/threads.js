@@ -103,4 +103,15 @@ router.put("/:id",function(req,res){
         }
     });
 });
+/*===================================
+    DELETE A THREAD FROM DATABSE
+=====================================*/
+router.delete("/:id", function(req,res){
+    threads.findByIdAndRemove(req.params.id, function(err){
+        if(err){
+            console.log(err);
+        }
+        res.redirect(req.baseUrl);
+    });
+});
 module.exports=router;

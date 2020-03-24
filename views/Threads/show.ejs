@@ -20,7 +20,7 @@
 <!--Edit and Delete Options-->
 <div class="controllers">
     <a href="<%=baseURL%>/<%=thread._id%>/edit" class="btn btn-outline-warning btn-lg">Edit</a>
-    <form action="#" method="POST">
+    <form action="<%=baseURL%>/<%=thread._id%>?_method=Delete" method="POST">
         <button class="btn btn-outline-danger btn-lg">Delete</b>
     </form>
 </div>

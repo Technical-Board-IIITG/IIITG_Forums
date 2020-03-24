@@ -65,4 +65,17 @@ router.put("/:id",function(req,res){
         }
     });
 });
+/*==============================
+    Delete a forum
+================================*/
+router.delete("/:id", function(req,res){
+    //Something to happen.
+    //res.send("You have reached the destroy route");
+    Forums.findByIdAndRemove(req.params.id, function(err){
+        if(err){
+            console.log(err);
+        }
+        res.redirect("/forum");
+    });
+});
 module.exports=router;

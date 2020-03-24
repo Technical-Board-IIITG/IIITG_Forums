@@ -30,7 +30,7 @@ router.get("/new", function(req,res){
     Adding new thread to the forum
 ==========================================*/
 router.post("/", function(req,res){
-    console.log(req.body);
+    //console.log(req.body);
     var Thread_name=req.body.Thread_name;
     var Thread_Description=req.body.Thread_Description;
     var newThread={Thread_name:Thread_name, Thread_Description:Thread_Description};
@@ -72,8 +72,34 @@ router.get("/:id/show", function(req,res){
             console.log(err);
         }
         else{
-            console.log(foundthread);
+            //console.log(foundthread);
             res.render("Threads/show",{thread:foundthread, baseURL:baseUrl});
+        }
+    });
+});
+/*====================================
+        ShHOW EDIT THREAD PAGE
+======================================*/
+router.get("/:id/edit", function(req,res){
+    //console.log(req.baseUrl);
+    threads.findById(req.params.id, function(err, foundThread){
+        if(err){
+            console.log("Thread Could not be found");
+        }else{
+            res.render("Threads/edit.ejs",{thread: foundThread, baseUrl: req.baseUrl});
+        }
+    });
+});
+/*====================================
+         EDIT THREAD INSIDE DATABASE
+======================================*/
+router.put("/:id",function(req,res){
+    threads.findByIdAndUpdate(req.params.id,req.body,function(err, updatedThread){
+        if(err){
+            console.log(err);
+            res.redirect("/forums");
+        }else{
+            res.redirect(req.baseUrl+"/"+req.params.id+"/show");
         }
     });
 });

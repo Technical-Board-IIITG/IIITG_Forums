@@ -9,10 +9,20 @@
 <!--==================================================
     Place For Actual HTML Code
 ======================================================-->
-<h1>Thread: <%=thread.Thread_name%></h1>
-<hr>
+<!--Thread Layout-->
 <div>
-    <%=thread.Thread_Description%>
+    <h1>Thread: <%=thread.Thread_name%></h1>
+    <hr>
+    <div>
+        <%=thread.Thread_Description%>
+    </div>
+</div>
+<!--Edit and Delete Options-->
+<div class="controllers">
+    <a href="<%=baseURL%>/<%=thread._id%>/edit" class="btn btn-outline-warning btn-lg">Edit</a>
+    <form action="#" method="POST">
+        <button class="btn btn-outline-danger btn-lg">Delete</b>
+    </form>
 </div>
 <hr>
 <!--View all comments-->

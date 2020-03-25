@@ -71,9 +71,15 @@ router.put("/:id",function(req,res){
 router.delete("/:id", function(req,res){
     //Something to happen.
     //res.send("You have reached the destroy route");
-    Forums.findByIdAndRemove(req.params.id, function(err){
+    /*
+        Delete This Way to make cascading deletion possible 
+    */
+    Forums.findById(req.params.id, function(err, foundforum)
+    {
         if(err){
             console.log(err);
+        }else{
+            foundforum.remove();
         }
         res.redirect("/forum");
     });

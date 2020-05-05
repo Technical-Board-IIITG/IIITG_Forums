@@ -44,6 +44,14 @@
             <th scope="row">
                 <%=cmt.author%>
             </th>
+            <th>
+                <a href="#" class="btn btn-outline-warning btn-sm" id="edit-comment">Edit</a>
+            </th>
+            <th>
+                <form action="#" method="POST">
+                    <button class="btn btn-outline-danger btn-sm">Delete</b>
+                </form>
+            </th>
         </tr>
     <%})%>
         </tbody>
@@ -72,5 +80,12 @@
             x.style.display = "none";
         }
     }
+    /*
+    function toggleEditForum(){
+        var x=document.getElementById("edit-comment"){
+            //Make edit-comment form toggle
+        }
+    }
+    */
 </script>
 <%-include("../partials/footer")%>

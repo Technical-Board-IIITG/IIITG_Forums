@@ -25,6 +25,6 @@ app.use("/forum/:id/thread", threadRoutes);
 app.use("/forum/:id/thread/:id/comments", commentRoutes);
 
 
-app.listen(3000, function () {
+app.listen(8000, function () {
    console.log("The forum Server Has Started!");
 });

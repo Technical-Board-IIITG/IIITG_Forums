@@ -4,6 +4,15 @@ var Thread=require("./thread");
 var forumSchema=new mongoose.Schema({
     Forum_name: String,
     Forum_description: String,
+    //Each forum has an author
+    author: {
+        id: {
+           type: mongoose.Schema.Types.ObjectId,
+           ref: "User"
+        },
+        username: String
+     },
+    //Since A forum will contain multiple threads
     thread:[
         {
             type: mongoose.Schema.Types.ObjectId,
@@ -11,7 +20,7 @@ var forumSchema=new mongoose.Schema({
         }
     ]   
 });
-
+//Implement on delete cascade
 forumSchema.pre("remove", async function(next){
     try{
         await Thread.remove({

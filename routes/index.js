@@ -17,12 +17,25 @@ router.post("/signup", function(req,res){
     let registered_user=new User(req.body);
     console.log(registered_user);
     registered_user.save(function(err, doc){
-        if(err){
-            console.log("Something went Wrong");
+        if (err) {
+            if (err.code === 11000) {
+                console.log('User was already registered');
+            }
         }
     });
     res.redirect("/");
 });
-
-
+/*=================================================
+    This Method is for looging in users
+===================================================*/
+router.post("/login", function(req,res){
+    User.findOne({EnrollNumber: req.body.EnrollNumber}, function(err, user){
+        if(err|| !user ||req.body.password!== user.password){
+            console.log("Incorrect Email Password");
+        }else{
+            console.log("Login is successfull");
+        }
+    });
+    res.redirect("/");
+});
 module.exports=router;

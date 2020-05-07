@@ -1,9 +1,9 @@
 var express=require("express");
 var router=express.Router();
 var Forums=require("../models/forum");
-
+var middleware =require("../middleware/index");
 //Index Show all forums 
-router.get("/", function(req,res){
+router.get("/",middleware.isLoggedIn, function(req,res){
     Forums.find({}, function(err, allForums){
         if(err){
             console.log(err);

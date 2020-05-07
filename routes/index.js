@@ -1,6 +1,7 @@
 var express=require("express");
 var router=express.Router();
 var User=require("../models/user");
+var bcrypt=require("bcryptjs");
 router.get("/", function(req,res){
     res.render("landing");
 });
@@ -14,6 +15,10 @@ router.get("/login", function(req,res){
         THIS ROUTE IS FOR SAVING THE USERS(Handling Registerations) 
 =====================================================================*/
 router.post("/signup", function(req,res){
+    //Hashing The Password
+    let hash= bcrypt.hashSync(req.body.password, 14);
+    req.body.password= hash;
+    //Saving User in the databse
     let registered_user=new User(req.body);
     console.log(registered_user);
     registered_user.save(function(err, doc){
@@ -30,12 +35,18 @@ router.post("/signup", function(req,res){
 ===================================================*/
 router.post("/login", function(req,res){
     User.findOne({EnrollNumber: req.body.EnrollNumber}, function(err, user){
-        if(err|| !user ||req.body.password!== user.password){
+        if(err|| !user ||!(bcrypt.compareSync(req.body.password, user.password))){
             console.log("Incorrect Email Password");
+            req.session.isLoggedIn = false;
+            res.redirect("/");
         }else{
             console.log("Login is successfull");
+            //Setting Up the session
+            req.session.isLoggedIn = true;
+            req.session.userId= user._id;
+            console.log(req.session.userId);
+            res.redirect("/forum");
         }
     });
-    res.redirect("/");
 });
 module.exports=router;

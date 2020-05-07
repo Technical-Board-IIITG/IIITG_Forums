@@ -14,7 +14,7 @@ router.get("/",middleware.isLoggedIn, function(req,res){
     });
 });
 //Create- Add new campgroud to the database
-router.post("/", function(req,res){
+router.post("/", middleware.isLoggedIn,function(req,res){
     var Forum_name=req.body.Forum_name;
     var Forum_description=req.body.Forum_description;
     var newForum={Forum_name: Forum_name, Forum_description:Forum_description};
@@ -31,13 +31,13 @@ router.post("/", function(req,res){
 
 
 //New- Show form to create new forum
-router.get("/new", function(req,res){
+router.get("/new", middleware.isLoggedIn,function(req,res){
     res.render("Forums/new");
 });
 /*=================================
     Showing a edit forum route
 ===================================*/
-router.get("/:id/edit", function(req,res){
+router.get("/:id/edit", middleware.isLoggedIn,function(req,res){
     //console.log(req.params.id);
     Forums.findById(req.params.id, function(err, foundforum){
         if(err){
@@ -54,7 +54,7 @@ router.get("/:id/edit", function(req,res){
 /*=============================
     PUT Request to edit forum
 ===============================*/
-router.put("/:id",function(req,res){
+router.put("/:id",middleware.isLoggedIn,function(req,res){
     //console.log(req.body);
     //res.send("Update Route");
     Forums.findByIdAndUpdate(req.params.id,req.body,function(err, updatedBlog){
@@ -69,7 +69,7 @@ router.put("/:id",function(req,res){
 /*==============================
     Delete a forum
 ================================*/
-router.delete("/:id", function(req,res){
+router.delete("/:id", middleware.isLoggedIn,function(req,res){
     //Something to happen.
     //res.send("You have reached the destroy route");
     /*

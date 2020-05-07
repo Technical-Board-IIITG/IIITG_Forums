@@ -2,12 +2,13 @@ var express=require("express");
 var router=express.Router({mergeParams: true});
 var Comment=require("../models/comment");
 var Thread=require("../models/thread");
+var middleware=require("../middleware/index");
 //var forum=require("../models/forum");
 
 /*=========================================
     Saving New Comments in the DataBase
 ===========================================*/
-router.post("/", function(req,res){
+router.post("/", middleware.isLoggedIn,function(req,res){
     //Find the thread
     //console.log("Base URL is "+req.baseUrl);
     var str=req.baseUrl;

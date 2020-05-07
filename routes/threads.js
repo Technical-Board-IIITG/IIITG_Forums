@@ -3,10 +3,11 @@ var router=express.Router({mergeParams: true});
 var comments=require("../models/comment");
 var threads=require("../models/thread");
 var forum=require("../models/forum");
+var middleware=require("../middleware/index");
 /*=====================================================
     To display all threads associated with a forum
 =======================================================*/
-router.get("/", function(req,res)
+router.get("/", middleware.isLoggedIn,function(req,res)
 {
    forum.findById(req.params.id).populate("thread").exec(function(err, foundforum){
         if(err){
@@ -20,7 +21,7 @@ router.get("/", function(req,res)
         Show new thread creation form
 ==========================================*/
 
-router.get("/new", function(req,res){
+router.get("/new",middleware.isLoggedIn, function(req,res){
     var forum_id=req.params.id;
     res.render("Threads/new",{forum_id:forum_id});
 
@@ -29,7 +30,7 @@ router.get("/new", function(req,res){
 /*========================================
     Adding new thread to the forum
 ==========================================*/
-router.post("/", function(req,res){
+router.post("/", middleware.isLoggedIn,function(req,res){
     //console.log(req.body);
     var Thread_name=req.body.Thread_name;
     var Thread_Description=req.body.Thread_Description;
@@ -62,7 +63,7 @@ router.post("/", function(req,res){
 /*=====================================
         Show a particular thread
 =======================================*/
-router.get("/:id/show", function(req,res){
+router.get("/:id/show", middleware.isLoggedIn,function(req,res){
     //res.send("Thread Deatils will be shown here");
     //console.log(req.params);
     //console.log(req.baseUrl);
@@ -80,7 +81,7 @@ router.get("/:id/show", function(req,res){
 /*====================================
         ShHOW EDIT THREAD PAGE
 ======================================*/
-router.get("/:id/edit", function(req,res){
+router.get("/:id/edit", middleware.isLoggedIn,function(req,res){
     //console.log(req.baseUrl);
     threads.findById(req.params.id, function(err, foundThread){
         if(err){
@@ -93,7 +94,7 @@ router.get("/:id/edit", function(req,res){
 /*====================================
          EDIT THREAD INSIDE DATABASE
 ======================================*/
-router.put("/:id",function(req,res){
+router.put("/:id",middleware.isLoggedIn,function(req,res){
     threads.findByIdAndUpdate(req.params.id,req.body,function(err, updatedThread){
         if(err){
             console.log(err);
@@ -106,7 +107,7 @@ router.put("/:id",function(req,res){
 /*===================================
     DELETE A THREAD FROM DATABSE
 =====================================*/
-router.delete("/:id", function(req,res){
+router.delete("/:id", middleware.isLoggedIn,function(req,res){
     threads.findByIdAndRemove(req.params.id, function(err){
         if(err){
             console.log(err);

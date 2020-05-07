@@ -4,6 +4,7 @@ var Forums=require("../models/forum");
 var middleware =require("../middleware/index");
 //Index Show all forums 
 router.get("/",middleware.isLoggedIn, function(req,res){
+    //console.log(req.session.user.Name);
     Forums.find({}, function(err, allForums){
         if(err){
             console.log(err);

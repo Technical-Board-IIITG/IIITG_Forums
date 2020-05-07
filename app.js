@@ -24,6 +24,15 @@ app.use(session({
    saveUninitialized: false, // don't create session until something stored
    secret: 'shhhh, very secret lubba wubba dubba etc'
  }));
+//To have a global variable across
+app.use(function(req,res,next){
+   if(req.session.isLoggedIn){
+      res.locals.currentUser=req.session.user;   
+   }else{
+      res.locals.currentUser=null;
+   }
+   next();
+});
 //seed the database
 //seedDB();
 

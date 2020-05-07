@@ -43,10 +43,24 @@ router.post("/login", function(req,res){
             console.log("Login is successfull");
             //Setting Up the session
             req.session.isLoggedIn = true;
-            req.session.userId= user._id;
-            console.log(req.session.userId);
+            req.session.user=user;
+            //console.log(req.session.userId);
             res.redirect("/forum");
         }
     });
+});
+/*====================================
+    Method to Handle Logout
+======================================*/
+router.get("/logout", function(req,res){
+    if (req.session) {
+        req.session.destroy(function(err) {
+          if(err) {
+            return next(err);
+          } else {
+            return res.redirect('/');
+          }
+        });
+    }   
 });
 module.exports=router;

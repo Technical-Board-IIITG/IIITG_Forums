@@ -34,7 +34,11 @@ router.post("/", middleware.isLoggedIn,function(req,res){
     //console.log(req.body);
     var Thread_name=req.body.Thread_name;
     var Thread_Description=req.body.Thread_Description;
-    var newThread={Thread_name:Thread_name, Thread_Description:Thread_Description};
+    var author={
+        id: res.locals.currentUser._id,
+        Name: res.locals.currentUser.Name
+    }
+    var newThread={Thread_name:Thread_name, Thread_Description:Thread_Description, author:author};
     //console.log("The new Thread Created\n");
     //console.log(newThread);
     //Lookup forum Using ID

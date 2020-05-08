@@ -13,11 +13,18 @@ router.get("/",middleware.isLoggedIn, function(req,res){
         }
     });
 });
-//Create- Add new campgroud to the database
+//Create- Add new Forum to the database
 router.post("/", middleware.isLoggedIn,function(req,res){
     var Forum_name=req.body.Forum_name;
     var Forum_description=req.body.Forum_description;
-    var newForum={Forum_name: Forum_name, Forum_description:Forum_description};
+    //console.log("This is req.user");
+    //console.log(res.locals.currentUser);
+    var author={
+        id: res.locals.currentUser._id,
+        Name: res.locals.currentUser.Name
+    }
+    console.log(author);
+    var newForum={Forum_name: Forum_name, Forum_description:Forum_description,author:author};
     //Adding new forum to the Database
     Forums.create(newForum, function(err, newlyCreated){
         if(err){

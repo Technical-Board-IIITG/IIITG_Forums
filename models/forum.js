@@ -10,7 +10,7 @@ var forumSchema=new mongoose.Schema({
            type: mongoose.Schema.Types.ObjectId,
            ref: "User"
         },
-        username: String
+        Name: String
      },
     //Since A forum will contain multiple threads
     thread:[

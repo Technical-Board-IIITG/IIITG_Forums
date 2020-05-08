@@ -5,13 +5,16 @@ var mongoose = require("mongoose");
 var methodOverride = require("method-override");
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
-var seedDB = require("./seeds");
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
+
 
 //Requiring Routes
 var forumRoutes = require("./routes/forums");
 var threadRoutes = require("./routes/threads");
 var indexRoutes = require("./routes/index");
 var commentRoutes= require("./routes/comments");
+var chatRoutes=require("./routes/chat");
 
 mongoose.connect("mongodb://localhost/Project_forum");
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -33,15 +36,22 @@ app.use(function(req,res,next){
    }
    next();
 });
-//seed the database
-//seedDB();
 
 app.use("/", indexRoutes);
 app.use("/forum", forumRoutes);
 app.use("/forum/:id/thread", threadRoutes);
 app.use("/forum/:id/thread/:id/comments", commentRoutes);
+app.use("/chat", chatRoutes);
 
 
-app.listen(8000, function () {
+//Socket.io functionalities
+io.on('connection', (socket) => {
+   console.log('a user connected');
+   socket.on('disconnect', () => {
+     console.log('user disconnected');
+   });
+});
+
+http.listen(8000, function () {
    console.log("The forum Server Has Started!");
 });

@@ -19,7 +19,16 @@ router.post("/", middleware.isLoggedIn,function(req,res){
             res.send("Failed to Find the thread");
         } else{
             //console.log(req.body);
-            Comment.create(req.body, function(err, comment){
+            var text=req.body.text;
+            var author={
+                id: res.locals.currentUser._id,
+                Name: res.locals.currentUser.Name
+            }
+            var newcomment={
+                text: text,
+                author: author
+            }
+            Comment.create(newcomment, function(err, comment){
                 if(err){
                     console.log(err);
                     res.send("Failed to add comment");

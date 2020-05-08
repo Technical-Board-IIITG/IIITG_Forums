@@ -191,24 +191,52 @@ a.article:hover {
     </nav>
     <!-- Page Content  -->
     <div id="content">
-        <h2>Rules Will Go Here</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-            <div class="line"></div>
-
-            <h2>Lorem Ipsum Dolor</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-            <div class="line"></div>
-
-            <h2>Lorem Ipsum Dolor</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-            <div class="line"></div>
-
-            <h3>Lorem Ipsum Dolor</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <h3>You are Chatting with <%=chattingTo.Name%></span></h3>
+        <ul id="messages"></ul>
+        <form action="" method="">
+            <input type="text" id="m">
+            <button class="btn-success btn-sm">Send</button>
+        </form>
     </div>
 </div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script>
+  var LoggedInSocket = <%=currentUser.EnrollNumber%>;
+  var chattingTo= <%=chattingTo.EnrollNumber%>;  
+  var socket = io();
+  console.log("Client Side Roll Number:-");
+  console.log(socket);
+  /*========================================
+  Saying to server, Hey! I am logged in  
+  =======================onclick="changeUserTo(); return false"===================*/ 
+  socket.emit('come_online', LoggedInSocket);
+
+  $(function () {
+    $('form').submit(function(e){
+      e.preventDefault(); // prevents page reloading
+      socket.emit('chat_message', $('#m').val(), chattingTo, LoggedInSocket);
+      $('#m').val('');
+      return false;
+    });
+    /*
+    socket.on('chat message', function(msg){
+      $('#messages').append($('<li>').text(msg));
+        //Save the message in the databse
+    });
+    */
+    socket.on('chat_message', function(msg, from){
+        //So that message ffrom other user are not displayed on chatscreen.
+        if(from===chattingTo){
+            var message=msg +" sent by "+from;
+            $('#messages').append($('<li>').text(message));
+        }else if(from===LoggedInSocket){
+            $('#messages').append($('<li>').text(msg));
+        }
+        //Write a post Request Using AJAX to store the entry in the databse
+    });
+    //console.log("currently logged in user is "+loggedInSocket);
+  });
+</script>
 <%- include("../partials/footer")%>

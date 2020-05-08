@@ -44,14 +44,49 @@ app.use("/forum/:id/thread/:id/comments", commentRoutes);
 app.use("/chat", chatRoutes);
 
 
-//Socket.io functionalities
+
+/*================================================
+   Handling Socket (i.e the Chatting facility)
+==================================================*/
+var sockets={};
+function getChatSocket(socket){
+   return sockets["chat-user-"+socket];
+}
+function setChatSocket(socket, data){
+   sockets["chat-user-"+socket] = data;
+}
+function deleteChatSocket(socket){
+   delete sockets["chat-user-"+socket];
+}
+//On a Client Connection
 io.on('connection', (socket) => {
    console.log('a user connected');
+   socket.on('come_online', function (userId) {
+      socket.soketid = userId;
+      setChatSocket(socket.soketid, socket);
+      //console.log("Users Currently Logged in are");
+      //console.log(sockets);
+ });
+ /*
+   socket.on('chat message', (msg) => {
+      io.emit('chat message', msg);
+    });
+*/
    socket.on('disconnect', () => {
      console.log('user disconnected');
+     var userId = socket.soketid;
+      deleteChatSocket(socket.soketid);
    });
-});
 
+   socket.on('chat_message', function (message, to, from) {
+      getChatSocket(to).emit('chat_message',message, from);
+      socket.emit('chat_message',message,from);
+      //console.log("Message is "+message+"\nto "+to+"\nFrom "+from);
+  });
+});
+/*=====================================
+      Starting The Server
+=======================================*/
 http.listen(8000, function () {
    console.log("The forum Server Has Started!");
 });

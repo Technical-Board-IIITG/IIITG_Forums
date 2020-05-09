@@ -259,9 +259,17 @@ a.article:hover {
     <div id="content">
         <h3>You are Chatting with <%=chattingTo.Name%></span></h3>
         <div class="fancyContainer">
-        <ul id="messages" class="chatBox"></ul>
+        <ul id="messages" class="chatBox">
+            <%history.forEach(function(msg){%>
+                <%if(msg.author.EnrollNumber===currentUser.EnrollNumber){%>
+                    <li class="me"><%=msg.text%></li>
+                <%}else{%>
+                    <li class="him"><%=msg.text%></li>
+                <%}%>
+            <%})%>
+        </ul>
         <form action="" method="">
-            <input type="text" id="m">
+            <input type="text" id="m" required>
             <button class="btn-success btn-sm" id="submit">Send</button>
         </form>
         </div>
@@ -292,8 +300,8 @@ a.article:hover {
     socket.on('chat_message', function(msg, from){
         //So that message ffrom other user are not displayed on chatscreen.
         if(from===chattingTo){
-            var message=msg +" sent by "+from;
-            $('#messages').append($('<li class="him">').text(message));
+            //var message=msg +" sent by "+from;
+            $('#messages').append($('<li class="him">').text(msg));
         }else if(from===LoggedInSocket){
             $('#messages').append($('<li class="me">').text(msg));
         }

@@ -19,5 +19,5 @@ var messageSchema=new mongoose.Schema({
         Name: String,
         EnrollNumber: Number
     }
-});
+},{timestamps: true});
 module.exports=mongoose.model("Message", messageSchema);

@@ -7,15 +7,17 @@ var messageSchema=new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         },
-        Name: String
+        Name: String,
+        EnrollNumber: Number
     },
     //Each Message has an receiver
-    reciever: {
+    receiver: {
         id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         },
-        Name: String
+        Name: String,
+        EnrollNumber: Number
     }
 });
 module.exports=mongoose.model("Message", messageSchema);

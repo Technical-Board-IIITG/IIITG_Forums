@@ -7,6 +7,8 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
+var Message=require("./models/message");
+var Users=require("./models/user");
 
 
 //Requiring Routes
@@ -43,8 +45,6 @@ app.use("/forum/:id/thread", threadRoutes);
 app.use("/forum/:id/thread/:id/comments", commentRoutes);
 app.use("/chat", chatRoutes);
 
-
-
 /*================================================
    Handling Socket (i.e the Chatting facility)
 ==================================================*/
@@ -64,24 +64,50 @@ io.on('connection', (socket) => {
    socket.on('come_online', function (userId) {
       socket.soketid = userId;
       setChatSocket(socket.soketid, socket);
-      //console.log("Users Currently Logged in are");
-      //console.log(sockets);
  });
- /*
-   socket.on('chat message', (msg) => {
-      io.emit('chat message', msg);
-    });
-*/
    socket.on('disconnect', () => {
      console.log('user disconnected');
      var userId = socket.soketid;
       deleteChatSocket(socket.soketid);
    });
-
    socket.on('chat_message', function (message, to, from) {
-      getChatSocket(to).emit('chat_message',message, from);
+         if(getChatSocket(to)){
+            console.log("User is online and session has been established");
+            getChatSocket(to).emit('chat_message',message, from);
+         }else{
+            console.log("user is not online");
+      }
       socket.emit('chat_message',message,from);
-      //console.log("Message is "+message+"\nto "+to+"\nFrom "+from);
+      //Saving the message in database
+      Users.findOne({EnrollNumber: to}, function(err,receiver){
+         if(err){
+            console.log(err);
+         }else{
+            Users.findOne({EnrollNumber: from}, function(err, sender){
+                  if(err){
+                     console.log(err);
+                  }else{
+                        var text=message;
+                        var author={
+                           id: sender._id,
+                           Name: sender.Name,
+                           EnrollNumber: sender.EnrollNumber
+                        };
+                        var received={
+                           id: receiver._id,
+                           Name: receiver.Name,
+                           EnrollNumber: receiver.EnrollNumber
+                        }
+                        Message.create({text: text, author:author, receiver:received}, function(err,message){
+                           if(err){
+                              console.log("Was Not able to save in database");
+                              console.log(err);
+                           }
+                        });
+                  }
+            });
+         }
+      });
   });
 });
 /*=====================================

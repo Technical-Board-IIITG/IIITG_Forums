@@ -113,13 +113,11 @@ a[data-toggle="collapse"] {
     right: 20px;
     transform: translateY(-50%);
 }
-
 ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
     background: #6d7fcc;
 }
-
 ul.CTAs {
     padding: 20px;
 }
@@ -131,7 +129,6 @@ ul.CTAs a {
     border-radius: 5px;
     margin-bottom: 5px;
 }
-
 a.download {
     background: #fff;
     color: #7386D5;
@@ -169,9 +166,78 @@ a.article:hover {
         display: none;
     }
 }
+    /*
     #messages { list-style-type: none; margin: 0; padding: 0; }
     #messages li { padding: 5px 10px; }
     #messages li:nth-child(odd) { background: #eee; }
+    */
+    .fancyContainer{
+  border: 1px solid #555;
+  position:relative;
+  width:300px;
+  padding:5px;
+  overflow:hidden;
+}
+.chatBox {
+  width: 300px;
+  list-style: none;
+  margin: 0 0 0 -40px;
+  position:0;
+}
+
+.chatBox li {
+  margin: 5px 0 5px 0;
+  padding: 3px 5px 3px 5px;
+}
+
+/*Set up initial chat element for .me*/
+.chatBox .me {
+  min-height: 20px;
+  float:right;
+  clear: both;
+  background-color: #34a1ef;
+  border-radius: 10px 2px 2px 10px;
+}
+
+/*Set up initial chat element for .him*/
+.chatBox .him {
+  min-height: 20px;
+  float:left;
+  clear: both;
+  background-color: #ddd;
+  border-radius: 2px 10px 10px 2px;
+}
+/*Set up grouped radius*/
+.him + .me {
+  border-top-right-radius:10px;
+}
+.me + .him {
+  border-top-left-radius:10px;
+}
+.me + .me {
+  border-bottom-right-radius:2px;
+}
+.him + .him {
+  border-bottom-left-radius:2px;
+}
+
+
+/*Set up First and Last radius for .me*/
+.chatBox > .me:first-child {
+  border-top-right-radius:10px;
+}
+.chatBox > .me:last-child{
+  border-bottom-right-radius:10px;
+}
+
+/*Set up First and Last radius for .him*/
+.chatBox > .him:first-child{
+  border-top-left-radius:10px;
+}
+.chatBox > .him:last-child{
+  border-bottom-left-radius:10px;
+}
+
 </style>
 <div class="wrapper">
     <!-- Sidebar  -->
@@ -192,25 +258,28 @@ a.article:hover {
     <!-- Page Content  -->
     <div id="content">
         <h3>You are Chatting with <%=chattingTo.Name%></span></h3>
-        <ul id="messages"></ul>
+        <div class="fancyContainer">
+        <ul id="messages" class="chatBox"></ul>
         <form action="" method="">
             <input type="text" id="m">
-            <button class="btn-success btn-sm">Send</button>
+            <button class="btn-success btn-sm" id="submit">Send</button>
         </form>
+        </div>
     </div>
 </div>
-
 <script src="/socket.io/socket.io.js"></script>
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
   var LoggedInSocket = <%=currentUser.EnrollNumber%>;
-  var chattingTo= <%=chattingTo.EnrollNumber%>;  
+  var chattingTo= <%=chattingTo.EnrollNumber%>;
+  var getId= "<%=chattingTo._id%>";  
+  console.log("Id is "+getId);
   var socket = io();
   console.log("Client Side Roll Number:-");
   console.log(socket);
   /*========================================
   Saying to server, Hey! I am logged in  
-  =======================onclick="changeUserTo(); return false"===================*/ 
+  ==========================================*/ 
   socket.emit('come_online', LoggedInSocket);
 
   $(function () {
@@ -220,23 +289,17 @@ a.article:hover {
       $('#m').val('');
       return false;
     });
-    /*
-    socket.on('chat message', function(msg){
-      $('#messages').append($('<li>').text(msg));
-        //Save the message in the databse
-    });
-    */
     socket.on('chat_message', function(msg, from){
         //So that message ffrom other user are not displayed on chatscreen.
         if(from===chattingTo){
             var message=msg +" sent by "+from;
-            $('#messages').append($('<li>').text(message));
+            $('#messages').append($('<li class="him">').text(message));
         }else if(from===LoggedInSocket){
-            $('#messages').append($('<li>').text(msg));
+            $('#messages').append($('<li class="me">').text(msg));
         }
-        //Write a post Request Using AJAX to store the entry in the databse
     });
-    //console.log("currently logged in user is "+loggedInSocket);
-  });
+    });
 </script>
-<%- include("../partials/footer")%>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

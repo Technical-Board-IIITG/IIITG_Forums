@@ -18,7 +18,10 @@ var indexRoutes = require("./routes/index");
 var commentRoutes= require("./routes/comments");
 var chatRoutes=require("./routes/chat");
 
-mongoose.connect("mongodb://localhost/Project_forum");
+//mongoose.connect("mongodb://localhost/Project_forum");
+
+mongoose.connect("mongodb+srv://i_rebel_aj:akshayjain123@forums-5jlpv.mongodb.net/test?retryWrites=true&w=majority");
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.set("view engine", "ejs");

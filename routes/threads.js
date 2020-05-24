@@ -39,8 +39,6 @@ router.post("/", middleware.isLoggedIn,function(req,res){
         Name: res.locals.currentUser.Name
     }
     var newThread={Thread_name:Thread_name, Thread_Description:Thread_Description, author:author};
-    //console.log("The new Thread Created\n");
-    //console.log(newThread);
     //Lookup forum Using ID
     forum.findById(req.params.id, function(err, foundforum){
         if(err){
@@ -48,16 +46,13 @@ router.post("/", middleware.isLoggedIn,function(req,res){
             res.redirect("/forum");
         }
         else{
-            //console.log(req.body);
             threads.create(newThread, function(err, newlyCreated){
                 if(err){
                     console.log(err);
                 }else{
-                    //console.log(newlyCreated);
-                    //var merged={...newlyCreated, ...newThread};
-                    //console.log(merged);
                     foundforum.thread.push(newlyCreated);
                     foundforum.save();
+                    req.flash("success", "Thread Added Successfully");
                     res.redirect("/forum/"+foundforum._id+"/thread");
                 }
             });
@@ -104,6 +99,7 @@ router.put("/:id",middleware.isLoggedIn,function(req,res){
             console.log(err);
             res.redirect("/forums");
         }else{
+            req.flash("sucess", "Thread Edited Successfully");
             res.redirect(req.baseUrl+"/"+req.params.id+"/show");
         }
     });
@@ -116,7 +112,10 @@ router.delete("/:id", middleware.isLoggedIn,function(req,res){
         if(err){
             console.log(err);
         }
-        res.redirect(req.baseUrl);
+        else{
+            req.flash("error", "Thread Removed Succesfully");
+        }
     });
+    res.redirect(req.baseUrl);
 });
 module.exports=router;

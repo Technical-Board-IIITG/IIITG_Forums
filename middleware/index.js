@@ -9,9 +9,9 @@ middlewareObj.isLoggedIn= function(req,res,next){
         //console.log("Session variable is set");
         return next();
     }
-    //req.flash("error", "You need to be logged in to do that");
+    req.flash("error", "You need to be logged in to do that");
     //console.log(req.session);
-    console.log("User is not logged in");
+    //console.log("User is not logged in");
     res.redirect("/login");
 }
 module.exports = middlewareObj;

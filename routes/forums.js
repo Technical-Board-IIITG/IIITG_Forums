@@ -30,13 +30,11 @@ router.post("/", middleware.isLoggedIn,function(req,res){
         if(err){
             console.log(err);
         }else{
+            req.flash("success", "Forum added successfully");
             res.redirect("/forum");
         }
     });
 });
-
-
-
 //New- Show form to create new forum
 router.get("/new", middleware.isLoggedIn,function(req,res){
     res.render("Forums/new");
@@ -69,6 +67,7 @@ router.put("/:id",middleware.isLoggedIn,function(req,res){
             console.log(err);
             res.redirect("/forums");
         }else{
+            req.flash("success", "Forum has been edited successfully");
             res.redirect("/forum/"+req.params.id+"/thread");
         }
     });
@@ -88,8 +87,10 @@ router.delete("/:id", middleware.isLoggedIn,function(req,res){
             console.log(err);
         }else{
             foundforum.remove();
+            req.flash("error", "Forum Removed Succesfully");
+            res.redirect("/forum");
         }
-        res.redirect("/forum");
     });
+
 });
 module.exports=router;

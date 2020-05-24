@@ -24,11 +24,15 @@ router.post("/signup", function(req,res){
     registered_user.save(function(err, doc){
         if (err) {
             if (err.code === 11000) {
-                console.log('User was already registered');
+                req.flash("error", "Already Taken Username");
+                //console.log('User was already registered');
             }
+        }else{
+            req.flash("success", "Signup was successfull, now you can login");
+            res.redirect("/");
         }
     });
-    res.redirect("/");
+    
 });
 /*=================================================
     This Method is for looging in users
@@ -36,11 +40,13 @@ router.post("/signup", function(req,res){
 router.post("/login", function(req,res){
     User.findOne({EnrollNumber: req.body.EnrollNumber}, function(err, user){
         if(err|| !user ||!(bcrypt.compareSync(req.body.password, user.password))){
-            console.log("Incorrect Email Password");
+            //console.log("Incorrect Email Password");
+            req.flash("error", "Incorrect Username/Password");
             req.session.isLoggedIn = false;
             res.redirect("/");
         }else{
-            console.log("Login is successfull");
+            //console.log("Login is successfull");
+            req.flash("success", "Login Successfull");
             //Setting Up the session
             req.session.isLoggedIn = true;
             req.session.user=user;

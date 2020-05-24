@@ -7,6 +7,7 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
+var flash=require("connect-flash");
 var Message=require("./models/message");
 var Users=require("./models/user");
 
@@ -19,11 +20,18 @@ var commentRoutes= require("./routes/comments");
 var chatRoutes=require("./routes/chat");
 
 //console.log(process.env.DATABASEURL);
-//mongoose.connect("mongodb://localhost/Project_forum");
+mongoose.connect("mongodb://localhost/Project_forum");
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true);
+
 
 //mongoose.connect("mongodb+srv://i_rebel_aj:akshayjain123@forums-5jlpv.mongodb.net/test?retryWrites=true&w=majority");
-mongoose.connect(process.env.DATABASEURL);
+//mongoose.connect(process.env.DATABASEURL);
 
+
+app.use(flash());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.set("view engine", "ejs");
@@ -41,6 +49,8 @@ app.use(function(req,res,next){
    }else{
       res.locals.currentUser=null;
    }
+   res.locals.error=req.flash("error");
+   res.locals.success=req.flash("success");
    next();
 });
 

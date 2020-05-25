@@ -9,6 +9,7 @@
               <th scope="col"># of Threads</th>
               <th scope="col">Last Updated and Last post</th>
               <th scope="col">Likes</th>
+              <th scope="col">Forum Options</th>
             </tr>
           </thead>
         <tbody>
@@ -27,20 +28,22 @@
                 0
             </th>
             <th scope="row">
-                <a href="/forum/<%=forum._id%>/edit" class="btn btn-outline-warning btn-lg">Edit</a>
-            </th>
-            <th scope="row">
-                <!--Deletion Handeled from inside-->
-                <form action="/forum/<%=forum._id%>?_method=DELETE" method="POST">
-                    <button class="btn btn-outline-danger btn-lg">Delete</b>
-                </form>
+                <%if(forum.author.id.equals(currentUser._id)){%>
+                    <a href="/forum/<%=forum._id%>/edit" class="btn btn-outline-warning btn-sm">Edit</a>
+                    <!--Deletion Handeled from inside-->
+                    <form action="/forum/<%=forum._id%>?_method=DELETE" method="POST">
+                        <button class="btn btn-outline-danger btn-sm">Delete</b>
+                    </form>
+                <%}else{%>
+                    <a href="#" class="btn btn-outline-info btn-sm ">Report</a>
+                <%}%>
             </th>
         </tr>
     <%});%>
         </tbody>
     </table>
+    <!--Create and delete forum will have to be taken somewhere else-->
+    <a href="/forum/new" class="btn btn-outline-primary">Create A New Forum</a>
 </div>
-<!--Create and delete forum will have to be taken somewhere else-->
-<a href="/forum/new" class="btn btn-outline-primary">Create A New Forum</a>
-<a href="" class="btn btn-outline-danger">Delete a Forum</a>
+
 <%-include("../partials/footer")%>

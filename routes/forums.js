@@ -42,7 +42,7 @@ router.get("/new", middleware.isLoggedIn,function(req,res){
 /*=================================
     Showing a edit forum route
 ===================================*/
-router.get("/:id/edit", middleware.isLoggedIn,function(req,res){
+router.get("/:id/edit", middleware.isLoggedIn,middleware.checkForumOwnership,function(req,res){
     //console.log(req.params.id);
     Forums.findById(req.params.id, function(err, foundforum){
         if(err){

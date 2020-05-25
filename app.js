@@ -59,7 +59,9 @@ app.use("/forum", forumRoutes);
 app.use("/forum/:id/thread", threadRoutes);
 app.use("/forum/:id/thread/:id/comments", commentRoutes);
 app.use("/chat", chatRoutes);
-
+app.get("*", (req,res)=>{
+   res.send("Aww snap (An Error page must go here)");
+});
 /*================================================
    Handling Socket (i.e the Chatting facility)
 ==================================================*/

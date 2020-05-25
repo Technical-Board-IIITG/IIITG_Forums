@@ -99,8 +99,8 @@ router.put("/:id",middleware.isLoggedIn,function(req,res){
             console.log(err);
             res.redirect("/forums");
         }else{
-            req.flash("sucess", "Thread Edited Successfully");
-            res.redirect(req.baseUrl+"/"+req.params.id+"/show");
+            req.flash("success", "Thread Edited Successfully");
+            res.redirect(req.baseUrl);
         }
     });
 });
@@ -111,11 +111,12 @@ router.delete("/:id", middleware.isLoggedIn,function(req,res){
     threads.findByIdAndRemove(req.params.id, function(err){
         if(err){
             console.log(err);
+            res.redirect("/error");
         }
         else{
             req.flash("error", "Thread Removed Succesfully");
+            res.redirect(req.baseUrl);
         }
     });
-    res.redirect(req.baseUrl);
 });
 module.exports=router;

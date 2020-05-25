@@ -3,13 +3,13 @@ var router=express.Router();
 var User=require("../models/user");
 var bcrypt=require("bcryptjs");
 router.get("/", function(req,res){
-    res.render("landing");
+    res.render("Index/landing");
 });
 router.get("/signup", function(req,res){
-    res.render("signup");
+    res.render("Index/signup");
 });
 router.get("/login", function(req,res){
-    res.render("login");
+    res.render("Index/login");
 });
 /*===================================================================
         THIS ROUTE IS FOR SAVING THE USERS(Handling Registerations) 

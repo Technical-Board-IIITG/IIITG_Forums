@@ -1,0 +1,313 @@
+<%- include("../partials/header")%>
+<style>
+    /*
+    DEMO STYLE
+*/
+
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #fafafa;
+}
+
+p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 300;
+    line-height: 1.7em;
+    color: #999;
+}
+
+a,
+a:hover,
+a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.navbar {
+    padding: 15px 10px;
+    background: #fff;
+    border: none;
+    border-radius: 0;
+    margin-bottom: 40px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-btn {
+    box-shadow: none;
+    outline: none !important;
+    border: none;
+}
+
+.line {
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px dashed #ddd;
+    margin: 40px 0;
+}
+
+/* ---------------------------------------------------
+    SIDEBAR STYLE
+----------------------------------------------------- */
+
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    background: #7386D5;
+    color: #fff;
+    transition: all 0.3s;
+}
+
+#sidebar.active {
+    margin-left: -250px;
+}
+
+#sidebar .sidebar-header {
+    padding: 20px;
+    background: #6d7fcc;
+}
+
+#sidebar ul.components {
+    padding: 20px 0;
+    border-bottom: 1px solid #47748b;
+}
+
+#sidebar ul p {
+    color: #fff;
+    padding: 10px;
+}
+
+#sidebar ul li a {
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+}
+
+#sidebar ul li a:hover {
+    color: #7386D5;
+    background: #fff;
+}
+
+#sidebar ul li.active>a,
+a[aria-expanded="true"] {
+    color: #fff;
+    background: #6d7fcc;
+}
+
+a[data-toggle="collapse"] {
+    position: relative;
+}
+
+.dropdown-toggle::after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+ul ul a {
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
+    background: #6d7fcc;
+}
+ul.CTAs {
+    padding: 20px;
+}
+
+ul.CTAs a {
+    text-align: center;
+    font-size: 0.9em !important;
+    display: block;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+a.download {
+    background: #fff;
+    color: #7386D5;
+}
+
+a.article,
+a.article:hover {
+    background: #6d7fcc !important;
+    color: #fff !important;
+}
+
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
+
+#content {
+    width: 100%;
+    padding: 20px;
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -250px;
+    }
+    #sidebar.active {
+        margin-left: 0;
+    }
+    #sidebarCollapse span {
+        display: none;
+    }
+}
+    /*
+    #messages { list-style-type: none; margin: 0; padding: 0; }
+    #messages li { padding: 5px 10px; }
+    #messages li:nth-child(odd) { background: #eee; }
+    */
+    .fancyContainer{
+  border: 1px solid #555;
+  position:relative;
+  width:300px;
+  padding:5px;
+  overflow:hidden;
+}
+.chatBox {
+  width: 300px;
+  list-style: none;
+  margin: 0 0 0 -40px;
+  position:0;
+}
+
+.chatBox li {
+  margin: 5px 0 5px 0;
+  padding: 3px 5px 3px 5px;
+}
+
+/*Set up initial chat element for .me*/
+.chatBox .me {
+  min-height: 20px;
+  float:right;
+  clear: both;
+  background-color: #34a1ef;
+  border-radius: 10px 2px 2px 10px;
+}
+
+/*Set up initial chat element for .him*/
+.chatBox .him {
+  min-height: 20px;
+  float:left;
+  clear: both;
+  background-color: #ddd;
+  border-radius: 2px 10px 10px 2px;
+}
+/*Set up grouped radius*/
+.him + .me {
+  border-top-right-radius:10px;
+}
+.me + .him {
+  border-top-left-radius:10px;
+}
+.me + .me {
+  border-bottom-right-radius:2px;
+}
+.him + .him {
+  border-bottom-left-radius:2px;
+}
+
+
+/*Set up First and Last radius for .me*/
+.chatBox > .me:first-child {
+  border-top-right-radius:10px;
+}
+.chatBox > .me:last-child{
+  border-bottom-right-radius:10px;
+}
+
+/*Set up First and Last radius for .him*/
+.chatBox > .him:first-child{
+  border-top-left-radius:10px;
+}
+.chatBox > .him:last-child{
+  border-bottom-left-radius:10px;
+}
+
+</style>
+<div class="wrapper">
+    <!-- Sidebar  -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3>The Chat App</h3>
+        </div>
+        <ul class="list-unstyled components">
+            <p>You are logged in as:<strong><%=currentUser.Name%></strong></p>
+            <h5>Chat With the following:-</h5>
+            <%Users.forEach(function(User){%>
+            <li>
+                <a href="/chat/<%=User._id%>"><%=User.Name%></a>
+            </li>
+            <%});%>
+        </ul>
+    </nav>
+    <!-- Page Content  -->
+    <div id="content">
+        <h3>You are Chatting with <%=chattingTo.Name%></span></h3>
+        <div class="fancyContainer">
+        <ul id="messages" class="chatBox">
+            <%history.forEach(function(msg){%>
+                <%if(msg.author.EnrollNumber===currentUser.EnrollNumber){%>
+                    <li class="me"><%=msg.text%></li>
+                <%}else{%>
+                    <li class="him"><%=msg.text%></li>
+                <%}%>
+            <%})%>
+        </ul>
+        <form action="" method="">
+            <input type="text" id="m" required>
+            <button class="btn-success btn-sm" id="submit">Send</button>
+        </form>
+        </div>
+    </div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script>
+  var LoggedInSocket = <%=currentUser.EnrollNumber%>;
+  var chattingTo= <%=chattingTo.EnrollNumber%>;
+  var getId= "<%=chattingTo._id%>";  
+  console.log("Id is "+getId);
+  var socket = io();
+  console.log("Client Side Roll Number:-");
+  console.log(socket);
+  /*========================================
+  Saying to server, Hey! I am logged in  
+  ==========================================*/ 
+  socket.emit('come_online', LoggedInSocket);
+
+  $(function () {
+    $('form').submit(function(e){
+      e.preventDefault(); // prevents page reloading
+      socket.emit('chat_message', $('#m').val(), chattingTo, LoggedInSocket);
+      $('#m').val('');
+      return false;
+    });
+    socket.on('chat_message', function(msg, from){
+        //So that message ffrom other user are not displayed on chatscreen.
+        if(from===chattingTo){
+            //var message=msg +" sent by "+from;
+            $('#messages').append($('<li class="him">').text(msg));
+        }else if(from===LoggedInSocket){
+            $('#messages').append($('<li class="me">').text(msg));
+        }
+    });
+    });
+</script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

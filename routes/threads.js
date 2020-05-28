@@ -3,10 +3,11 @@ var router=express.Router({mergeParams: true});
 var comments=require("../models/comment");
 var threads=require("../models/thread");
 var forum=require("../models/forum");
+var middleware=require("../middleware/index");
 /*=====================================================
     To display all threads associated with a forum
 =======================================================*/
-router.get("/", function(req,res)
+router.get("/", middleware.isLoggedIn,function(req,res)
 {
    forum.findById(req.params.id).populate("thread").exec(function(err, foundforum){
         if(err){
@@ -20,7 +21,7 @@ router.get("/", function(req,res)
         Show new thread creation form
 ==========================================*/
 
-router.get("/new", function(req,res){
+router.get("/new",middleware.isLoggedIn, function(req,res){
     var forum_id=req.params.id;
     res.render("Threads/new",{forum_id:forum_id});
 
@@ -29,13 +30,15 @@ router.get("/new", function(req,res){
 /*========================================
     Adding new thread to the forum
 ==========================================*/
-router.post("/", function(req,res){
-    console.log(req.body);
+router.post("/", middleware.isLoggedIn,function(req,res){
+    //console.log(req.body);
     var Thread_name=req.body.Thread_name;
     var Thread_Description=req.body.Thread_Description;
-    var newThread={Thread_name:Thread_name, Thread_Description:Thread_Description};
-    //console.log("The new Thread Created\n");
-    //console.log(newThread);
+    var author={
+        id: res.locals.currentUser._id,
+        Name: res.locals.currentUser.Name
+    }
+    var newThread={Thread_name:Thread_name, Thread_Description:Thread_Description, author:author};
     //Lookup forum Using ID
     forum.findById(req.params.id, function(err, foundforum){
         if(err){
@@ -43,16 +46,13 @@ router.post("/", function(req,res){
             res.redirect("/forum");
         }
         else{
-            //console.log(req.body);
             threads.create(newThread, function(err, newlyCreated){
                 if(err){
                     console.log(err);
                 }else{
-                    //console.log(newlyCreated);
-                    //var merged={...newlyCreated, ...newThread};
-                    //console.log(merged);
                     foundforum.thread.push(newlyCreated);
                     foundforum.save();
+                    req.flash("success", "Thread Added Successfully");
                     res.redirect("/forum/"+foundforum._id+"/thread");
                 }
             });
@@ -62,7 +62,7 @@ router.post("/", function(req,res){
 /*=====================================
         Show a particular thread
 =======================================*/
-router.get("/:id/show", function(req,res){
+router.get("/:id/show", middleware.isLoggedIn,function(req,res){
     //res.send("Thread Deatils will be shown here");
     //console.log(req.params);
     //console.log(req.baseUrl);
@@ -72,8 +72,50 @@ router.get("/:id/show", function(req,res){
             console.log(err);
         }
         else{
-            console.log(foundthread);
+            //console.log(foundthread);
             res.render("Threads/show",{thread:foundthread, baseURL:baseUrl});
+        }
+    });
+});
+/*====================================
+        ShHOW EDIT THREAD PAGE
+======================================*/
+router.get("/:id/edit", middleware.isLoggedIn,function(req,res){
+    //console.log(req.baseUrl);
+    threads.findById(req.params.id, function(err, foundThread){
+        if(err){
+            console.log("Thread Could not be found");
+        }else{
+            res.render("Threads/edit.ejs",{thread: foundThread, baseUrl: req.baseUrl});
+        }
+    });
+});
+/*====================================
+         EDIT THREAD INSIDE DATABASE
+======================================*/
+router.put("/:id",middleware.isLoggedIn,function(req,res){
+    threads.findByIdAndUpdate(req.params.id,req.body,function(err, updatedThread){
+        if(err){
+            console.log(err);
+            res.redirect("/forums");
+        }else{
+            req.flash("success", "Thread Edited Successfully");
+            res.redirect(req.baseUrl);
+        }
+    });
+});
+/*===================================
+    DELETE A THREAD FROM DATABSE
+=====================================*/
+router.delete("/:id", middleware.isLoggedIn,function(req,res){
+    threads.findByIdAndRemove(req.params.id, function(err){
+        if(err){
+            console.log(err);
+            res.redirect("/error");
+        }
+        else{
+            req.flash("error", "Thread Removed Succesfully");
+            res.redirect(req.baseUrl);
         }
     });
 });

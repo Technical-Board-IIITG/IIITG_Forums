@@ -1,7 +1,7 @@
 <%- include("../partials/header")%>
 <!--Getting List of All forums-->
 <div class="container">
-    <h1>Forums</h1>
+    <h2>Hey! <%=currentUser.Name%> here are all the Forums</h2>
     <table class="table table-striped table-hover">
         <thead>
             <tr>
@@ -9,6 +9,7 @@
               <th scope="col"># of Threads</th>
               <th scope="col">Last Updated and Last post</th>
               <th scope="col">Likes</th>
+              <th scope="col">Forum Options</th>
             </tr>
           </thead>
         <tbody>
@@ -21,17 +22,28 @@
                 <%=forum.thread.length%>
             </th>
             <th scope="row">
-                12:00 am by <a href="">i_rebel_aj</a>
+                12:00 am by <a href=""><%=forum.author.Name%></a>
             </th>
             <th scope="row">
                 0
+            </th>
+            <th scope="row">
+                <%if(forum.author.id.equals(currentUser._id)){%>
+                    <a href="/forum/<%=forum._id%>/edit" class="btn btn-outline-warning btn-sm">Edit</a>
+                    <!--Deletion Handeled from inside-->
+                    <form action="/forum/<%=forum._id%>?_method=DELETE" method="POST">
+                        <button class="btn btn-outline-danger btn-sm">Delete</b>
+                    </form>
+                <%}else{%>
+                    <a href="#" class="btn btn-outline-info btn-sm ">Report</a>
+                <%}%>
             </th>
         </tr>
     <%});%>
         </tbody>
     </table>
+    <!--Create and delete forum will have to be taken somewhere else-->
+    <a href="/forum/new" class="btn btn-outline-primary">Create A New Forum</a>
 </div>
-<!--Create and delete forum will have to be taken somewhere else-->
-<a href="/forum/new" class="btn btn-outline-primary">Create A New Forum</a>
-<a href="" class="btn btn-outline-danger">Delete a Forum</a>
+
 <%-include("../partials/footer")%>

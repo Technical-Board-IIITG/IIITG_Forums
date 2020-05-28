@@ -10,6 +10,7 @@
               <th scope="col">Created By</th>
               <th scope="col">Statistics</th>
               <th scope="col">Last Post</th>
+              <th scope="col">Thread Options</th>
             </tr>
           </thead>
         <tbody>
@@ -22,19 +23,28 @@
                 <%=Thd.comments.length%>
             </th>
             <th scope="row">
-                <a href="">i_rebel_aj</a>
+                <a href=""><%=Thd.author.Name%></a>
             </th>
             <th scope="row">
                 0 views 0 responses
             </th>
             <th scope="row">
-                12:00 am <a href="">i_rebel_aj</a>
+                at 12:00 am by <a href="">Username of the person sending last post</a>
+            </th>
+            <th scope="row">
+                <%if(Thd.author.id.equals(currentUser._id)){%>
+                    <a href="/forum/<%=forum._id%>/thread/<%=Thd._id%>/edit" class="btn btn-outline-warning btn-sm">Edit</a>
+                    <form action="/forum/<%=forum._id%>/thread/<%=Thd._id%>?_method=Delete" method="POST">
+                        <button class="btn btn-outline-danger btn-sm">Delete</b>
+                    </form>
+                <%}else{%>
+                    <a href="#" class="btn btn-outline-info btn-sm ">Report</a>
+                <%}%>
             </th>
         </tr>
     <%})%>
         </tbody>
     </table>
+    <a href="/forum/<%=forum._id%>/thread/new" class="btn btn-outline-primary">Create new thread</a>
 </div>
-<a href="/forum/<%=forum._id%>/thread/new" class="btn btn-outline-primary">Create new thread</a>
-<a href="" class="btn btn-outline-danger">Delete a Thread</a>
 <%-include("../partials/footer")%>
